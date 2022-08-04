@@ -115,7 +115,14 @@ cd tmppublish
 git clone ${TARGET_REPO_URL}
 git checkout -b ${TARGET_BRANCH}
 
-cp ../${HUGO_PUBLISH_DIR} ${TARGET_SUBFOLDER} -R
+if [[ -z "${TARGET_SUBFOLDER}" ]]; then
+  echo "No TARGET_SUBFOLDER was set, so defaulting to ${TARGET_SUBFOLDER}".
+  cp ../${HUGO_PUBLISH_DIR}/* . -R
+else
+  echo "Subfolder set"
+  mkdir -p ${TARGET_SUBFOLDER}
+  cp ../${HUGO_PUBLISH_DIR}/* ${TARGET_SUBFOLDER}/ -R
+fi
 
 echo "Getting hash for base repository commit"
 HASH=$(echo "${GITHUB_SHA}" | cut -c1-7)
