@@ -30,6 +30,12 @@ if [[ -z "${HUGO_PUBLISH_DIR}" ]]; then
   echo "No HUGO_PUBLISH_DIR was set, so defaulting to ${HUGO_PUBLISH_DIR}"
 fi
 
+
+if [[ -z "${TARGET_SUBFOLDER}" ]]; then
+  TARGET_SUBFOLDER=.
+  echo "No TARGET_SUBFOLDER was set, so defaulting to ${TARGET_SUBFOLDER}".
+fi
+
 if [[ -z "${HUGO_VERSION}" ]]; then
     HUGO_VERSION=$(curl -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/gohugoio/hugo/releases?page=1&per_page=1" | jq -r ".[].tag_name" | sed 's/v//g')
     echo "No HUGO_VERSION was set, so defaulting to ${HUGO_VERSION}"
@@ -94,8 +100,6 @@ fi
 
 echo "Committing the site to git and pushing"
 
-git init
-
 if ! git config --get user.name; then
     git config --global user.name "${GITHUB_ACTOR}"
 fi
@@ -104,16 +108,21 @@ if ! git config --get user.email; then
     git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 fi
 
+cd ..
+# Make a temp publish folder
+mkdir tmppublish
+cd tmppublish
+git clone ${TARGET_REPO_URL}
+git checkout -b ${TARGET_BRANCH}
+
+cp ../${HUGO_PUBLISH_DIR} ${TARGET_SUBFOLDER} -R
+
 echo "Getting hash for base repository commit"
 HASH=$(echo "${GITHUB_SHA}" | cut -c1-7)
 
-###
-# Now add all the changes and commit and push
-###
-git checkout -b ${TARGET_BRANCH}
 
 git add . && \
 git commit -m "Auto publishing site from ${GITHUB_REPOSITORY}@${HASH}" && \
-git push --force "${TARGET_REPO_URL}" ${TARGET_BRANCH}
+git push "${TARGET_REPO_URL}" ${TARGET_BRANCH}
 
 echo "Complete"
