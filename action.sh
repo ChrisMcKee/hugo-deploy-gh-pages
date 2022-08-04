@@ -113,7 +113,7 @@ cd ..
 mkdir tmppublish
 cd tmppublish
 git clone ${TARGET_REPO_URL} . --depth 1
-git checkout -b ${TARGET_BRANCH}
+git checkout ${TARGET_BRANCH}
 
 if [[ -z "${TARGET_SUBFOLDER}" ]]; then
   echo "No TARGET_SUBFOLDER was set, so defaulting to ${TARGET_SUBFOLDER}".
