@@ -112,7 +112,7 @@ cd ..
 # Make a temp publish folder
 mkdir tmppublish
 cd tmppublish
-git clone ${TARGET_REPO_URL}
+git clone ${TARGET_REPO_URL} . --depth 1
 git checkout -b ${TARGET_BRANCH}
 
 if [[ -z "${TARGET_SUBFOLDER}" ]]; then
