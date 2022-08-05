@@ -117,6 +117,7 @@ git checkout ${TARGET_BRANCH}
 
 if [[ -z "${TARGET_SUBFOLDER}" ]]; then
   echo "No TARGET_SUBFOLDER was set, so defaulting to ${TARGET_SUBFOLDER}".
+  rm ${TARGET_SUBFOLDER} -Rf
   cp ../${HUGO_PUBLISH_DIR}/* . -R
 else
   echo "Subfolder set"
