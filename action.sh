@@ -85,6 +85,9 @@ fi
 ###
 # Build the site.
 ###
+hugo mod clean
+hugo mod get -u
+
 echo "Building the Hugo site with: 'hugo ${HUGO_ARGS}'"
 hugo "${HUGO_ARGS}"
 
