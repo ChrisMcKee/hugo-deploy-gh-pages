@@ -87,6 +87,7 @@ fi
 ###
 hugo mod clean
 hugo mod get -u
+hugo mod vendor
 
 echo "Building the Hugo site with: 'hugo ${HUGO_ARGS}'"
 hugo "${HUGO_ARGS}"
