@@ -12,6 +12,13 @@ if ! [ -x "$(command -v gh)" ]; then
   exit 1
 fi
 
+if ! [ -x "$(command -v go)" ]; then
+VERSION="1.19.0" # go version
+ARCH="amd64" # go archicture
+curl -O -L "https://golang.org/dl/go${VERSION}.linux-${ARCH}.tar.gz"
+tar -xz -C /usr/local "go${VERSION}.linux-${ARCH}.tar.gz"
+fi
+
 CURRENT_VERSION=$(grep -si HUGO_VERSION= action.sh | cut -d "=" -f 2)
 LATEST_VERSION=$(gh release list -R gohugoio/hugo -L 1 | cut -f 1)
 LATEST_VERSION=${LATEST_VERSION//v/}
